@@ -12,20 +12,22 @@ int main(int argc, char** argv)
     }
     else
     {
-        Window window("Paint The Town Pink!");
-        glewInit();
-        bool quit = false;
-        while(!quit)
         {
-            glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            window.Swap();
+            Window window("Paint The Town Pink!");
+            glewInit();
+            bool quit = false;
+            while(!quit)
+            {
+                glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                window.Swap();
 
-            SDL_Delay(8000);
-            quit = true;
+                SDL_Delay(8000);
+                quit = true;
+            }
         }
+        SDL_Quit();
     }
-    SDL_Quit();
     
     return 0;
 }
