@@ -1,5 +1,5 @@
 project(pttp)
-add_executable(${PROJECT_NAME} main.cpp window.cpp)
+add_executable(${PROJECT_NAME} main.cpp window.cpp renderer.cpp quad.cpp)
 
 include(FindPkgConfig)
 
