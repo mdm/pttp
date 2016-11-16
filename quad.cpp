@@ -2,12 +2,12 @@
 #include "quad.h"
 
 float Quad::vertices[] = {
-        0.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        1.0f, 1.0f, 0.0f,
-        1.0f, 1.0f, 0.0f,
-        1.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 0.0f
+    -1.0f, -1.0f, 0.0f,
+    -1.0f,  1.0f, 0.0f,
+     1.0f,  1.0f, 0.0f,
+     1.0f,  1.0f, 0.0f,
+     1.0f, -1.0f, 0.0f,
+    -1.0f, -1.0f, 0.0f
 };
 
 float Quad::texCoords[] = {
@@ -75,9 +75,9 @@ void Quad::setZ(int z)
 
 glm::mat4 Quad::getTransform()
 {
-    glm::mat4 translateZ = glm::translate(glm::vec3(0.0f, 0.0f, (float)_z));
-    glm::mat4 scale = glm::scale(glm::vec3((float)_width, (float)_height, 1.0f));
-    return translateZ * _transform * scale;
+    glm::mat4 translate = glm::translate(glm::vec3(_width / 2.0f, _height / 2.0f, (float) -_z));
+    glm::mat4 scale = glm::scale(glm::vec3(_width / 2.0f, _height / 2.0f, 1.0f));
+    return translate * _transform * scale;
 }
 
 void Quad::setTransform(const glm::mat4& transform)
@@ -106,7 +106,7 @@ uint8_t* Quad::makeCheckerBoard(int width, int height, int steps)
                 texture[i++] = 0;
                 texture[i++] = 0;
                 texture[i++] = 0;
-                texture[i++] = 0;
+                texture[i++] = 128;
             }
         }
     }

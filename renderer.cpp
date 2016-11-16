@@ -28,6 +28,8 @@ Renderer::Renderer()
     glewExperimental = GL_TRUE;
     glewInit();
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // set up shaders
     GLuint vertexShader, fragmentShader;
@@ -115,7 +117,7 @@ void Renderer::renderFrame()
         GLint modelViewLoc = glGetUniformLocation(_shaderProgram, "modelView");
         glUniformMatrix4fv(modelViewLoc, 1, GL_FALSE, glm::value_ptr(quad->getTransform()));
         GLint projectionLoc = glGetUniformLocation(_shaderProgram, "projection");
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(glm::ortho(0.0f, 800.0f, 600.0f, 0.0f)));
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, 100.0f, 0.0f)));
 
         // draw the quad
         glDrawArrays(GL_TRIANGLES, 0, 6);
