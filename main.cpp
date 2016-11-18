@@ -15,6 +15,7 @@ int main(int argc, char** argv)
     {
         {
             Window window("Paint The Town Pink!");
+            SDL_Event event;
             Renderer renderer;
             Quad* quad = new Quad(200, 200, 8);
             glm::mat4 translate = glm::translate(glm::vec3(100.0f, 100.0f, 0.0f));
@@ -29,6 +30,11 @@ int main(int argc, char** argv)
             float angleRadians = 3.1415926f / 4;
             while(!quit)
             {
+                SDL_PollEvent(&event);
+                if(event.type == SDL_QUIT)
+                {
+                    quit = true;
+                }
                 renderer.renderFrame();
                 window.Swap();
                 angleRadians += 0.001f;
