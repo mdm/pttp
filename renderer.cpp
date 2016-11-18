@@ -25,6 +25,8 @@ const char* Renderer::fragmentShaderSource =
 
 Renderer::Renderer()
 {
+    _framesRendered = 0;
+
     glewExperimental = GL_TRUE;
     glewInit();
     glEnable(GL_DEPTH_TEST);
@@ -105,6 +107,11 @@ void Renderer::addQuad(Quad* quad)
 
 void Renderer::renderFrame()
 {
+    if(_framesRendered == 0)
+    {
+        _startTime = clock();
+    }
+
     glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -120,8 +127,15 @@ void Renderer::renderFrame()
 
         // draw the quad
         glDrawArrays(GL_TRIANGLES, 0, 6);
-        
 
         // TODO: delete buffers ???
     }//*/
+
+    ++_framesRendered;
+    clock_t elapsedTime = clock() - _startTime;
+    if(elapsedTime >= CLOCKS_PER_SEC)
+    {
+        std::cout << _framesRendered << std::endl;
+        _framesRendered = 0;
+    }
 }

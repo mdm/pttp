@@ -21,6 +21,9 @@ private:
 
     GLuint _shaderProgram;
     std::vector<Quad*> _quads;
+
+    clock_t _startTime;
+    int _framesRendered;
 };
 
 #endif // RENDERER_H
