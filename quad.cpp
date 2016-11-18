@@ -23,7 +23,7 @@ Quad::Quad(int width, int height, int z)
 {
     _handle = 0;
     _z = z;
-    setTexture(width, height, makeCheckerBoard(width, height, 10));
+    setTexture(width, height, makeCheckerBoard(width, height, width / 10));
 }
 
 Quad::Quad(const std::string& pngFilename, int z)

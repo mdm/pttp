@@ -25,7 +25,7 @@ int main(int argc, char** argv)
             renderer.addQuad(quad);
             quad = new Quad(100, 100, 10);
             quad->setTransform(translate * rotate);
-            renderer.addQuad(quad);
+            renderer.addQuad(quad);//*/
             bool quit = false;
             float angleRadians = 3.1415926f / 4;
             while(!quit)

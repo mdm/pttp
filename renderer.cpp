@@ -112,6 +112,8 @@ void Renderer::renderFrame()
     for(auto quad : _quads)
     {
         glBindTexture(GL_TEXTURE_2D, quad->getHandle());
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, quad->getWidth(), quad->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, quad->getTexture());
         GLint texLoc = glGetUniformLocation(_shaderProgram, "tex");
         glUniform1i(texLoc, 0);
 
