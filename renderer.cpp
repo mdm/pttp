@@ -63,6 +63,22 @@ Renderer::Renderer()
     GLuint vertexArray;
     glGenVertexArrays(1, &vertexArray);
     glBindVertexArray(vertexArray);
+
+    // set up buffers
+    GLuint buffers[2];
+    glGenBuffers(2, buffers);
+
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Quad::vertices), Quad::vertices, GL_STATIC_DRAW);
+    GLint vertexLoc = glGetAttribLocation(_shaderProgram, "vertex");
+    glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(vertexLoc);
+
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Quad::texCoords), Quad::texCoords, GL_STATIC_DRAW);
+    GLint texCoordLoc = glGetAttribLocation(_shaderProgram, "texCoordIn");
+    glVertexAttribPointer(texCoordLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(texCoordLoc);
 }
 
 Renderer::~Renderer()
@@ -75,6 +91,15 @@ Renderer::~Renderer()
 
 void Renderer::addQuad(Quad* quad)
 {
+    // set up texture
+    GLuint texture;
+    glGenTextures(1, &texture);
+    
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, quad->getWidth(), quad->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, quad->getTexture());
+    
+    quad->setHandle(texture);
     _quads.push_back(quad);
 }
 
@@ -82,35 +107,12 @@ void Renderer::renderFrame()
 {
     glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //std::cout << sizeof(GLuint) << std::endl;
 
     for(auto quad : _quads)
     {
-        // set up buffers
-        GLuint buffers[2];
-        glGenBuffers(2, buffers);
-
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(quad->vertices), quad->vertices, GL_STATIC_DRAW);
-        GLint vertexLoc = glGetAttribLocation(_shaderProgram, "vertex");
-        glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        glEnableVertexAttribArray(vertexLoc);
-
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(quad->texCoords), quad->texCoords, GL_STATIC_DRAW);
-        GLint texCoordLoc = glGetAttribLocation(_shaderProgram, "texCoordIn");
-        glVertexAttribPointer(texCoordLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
-        glEnableVertexAttribArray(texCoordLoc);
-
-        // set up texture
-        GLuint texture;
-        glGenTextures(1, &texture);
-        
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, quad->getWidth(), quad->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, quad->getTexture());
+        glBindTexture(GL_TEXTURE_2D, quad->getHandle());
         GLint texLoc = glGetUniformLocation(_shaderProgram, "tex");
-
-        glActiveTexture(GL_TEXTURE0);
         glUniform1i(texLoc, 0);
 
         // set up matrix uniforms
@@ -121,5 +123,8 @@ void Renderer::renderFrame()
 
         // draw the quad
         glDrawArrays(GL_TRIANGLES, 0, 6);
+        
+
+        // TODO: delete buffers ???
     }//*/
 }

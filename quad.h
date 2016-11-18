@@ -5,6 +5,11 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
+struct QuadHandle
+{
+
+};
+
 class Quad
 {
 public:
@@ -18,6 +23,8 @@ public:
     void setTexture(int width, int height, uint8_t* texture, bool copy = false);
     int getZ();
     void setZ(int z);
+    int getHandle();
+    void setHandle(uint32_t handle);
     glm::mat4 getTransform();
     void setTransform(const glm::mat4& transform);
 
@@ -27,6 +34,7 @@ private:
     uint8_t* makeCheckerBoard(int width, int height, int steps);
 
     int _width, _height, _z;
+    uint32_t _handle;
     uint8_t* _texture;
     glm::mat4 _transform;
 };

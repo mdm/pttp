@@ -23,16 +23,25 @@ int main(int argc, char** argv)
             quad->setTransform(translate * rotate);
             renderer.addQuad(quad);
             quad = new Quad(100, 100, 10);
-            quad->setTransform(translate);
+            quad->setTransform(translate * rotate);
             renderer.addQuad(quad);
             bool quit = false;
+            float angleRadians = 3.1415926f / 4;
             while(!quit)
             {
                 renderer.renderFrame();
                 window.Swap();
+                angleRadians += 0.001f;
+                if(angleRadians > 2 * 3.1415926f)
+                {
+                    angleRadians = 0.0f;
+                    //quit = true;
+                }
+                rotate = glm::rotate(angleRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+                quad->setTransform(translate * rotate);
 
-                SDL_Delay(8000);
-                quit = true;
+                //SDL_Delay(8000);
+                //quit = true;
             }
         }
         SDL_Quit();

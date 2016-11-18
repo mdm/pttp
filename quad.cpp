@@ -21,6 +21,7 @@ float Quad::texCoords[] = {
 
 Quad::Quad(int width, int height, int z)
 {
+    _handle = 0;
     _z = z;
     setTexture(width, height, makeCheckerBoard(width, height, 10));
 }
@@ -71,6 +72,16 @@ int Quad::getZ()
 void Quad::setZ(int z)
 {
     _z = z;
+}
+
+int Quad::getHandle()
+{
+    return _z;
+}
+
+void Quad::setHandle(uint32_t handle)
+{
+    _handle = handle;
 }
 
 glm::mat4 Quad::getTransform()
