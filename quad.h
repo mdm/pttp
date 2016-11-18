@@ -5,11 +5,6 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
-struct QuadHandle
-{
-
-};
-
 class Quad
 {
 public:
