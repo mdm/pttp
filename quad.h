@@ -23,7 +23,7 @@ public:
     void setTexture(int width, int height, uint8_t* texture, bool copy = false);
     int getZ();
     void setZ(int z);
-    int getHandle();
+    uint32_t getHandle();
     void setHandle(uint32_t handle);
     glm::mat4 getTransform();
     void setTransform(const glm::mat4& transform);

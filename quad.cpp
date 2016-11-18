@@ -74,7 +74,7 @@ void Quad::setZ(int z)
     _z = z;
 }
 
-int Quad::getHandle()
+uint32_t Quad::getHandle()
 {
     return _z;
 }
