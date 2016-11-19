@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <iostream>
 
 #include "window.h"
 
@@ -16,6 +17,14 @@ Window::Window(const std::string& title)
                                SDL_WINDOW_OPENGL);
 
     _context = SDL_GL_CreateContext(_window);
+
+    int attrValue;
+    SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &attrValue);
+    std::cout << attrValue << std::endl;
+    SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &attrValue);
+    std::cout << attrValue << std::endl;
+    SDL_GL_GetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, &attrValue);
+    std::cout << (attrValue == SDL_GL_CONTEXT_PROFILE_CORE) << std::endl;
 }
 
 Window::~Window()
