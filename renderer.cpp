@@ -29,6 +29,10 @@ Renderer::Renderer()
 
     glewExperimental = GL_TRUE;
     glewInit();
+
+    std::cout << glGetString(GL_VENDOR) << std::endl;
+    std::cout << glGetString(GL_VERSION) << std::endl;
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
