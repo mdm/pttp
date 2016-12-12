@@ -4,6 +4,7 @@
 #include "window.h"
 #include "renderer.h"
 #include "quad.h"
+#include "level.h"
 
 int main(int argc, char** argv)
 {
@@ -30,6 +31,9 @@ int main(int argc, char** argv)
             renderer.addQuad(quad);//*/
             bool quit = false;
             float angleRadians = 3.1415926f / 4;
+
+            Level level("original.lvl");
+            std::cout << level.toString();
 
             uint32_t previousTimestamp = SDL_GetTicks();
             uint32_t lag = 0;
