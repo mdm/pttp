@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SDL.h>
+#include <SDL_image.h>
 
 #include "window.h"
 #include "renderer.h"
@@ -14,6 +15,8 @@ int main(int argc, char** argv)
     }
     else
     {
+        IMG_Init(IMG_INIT_PNG);
+
         {
             Window window("Paint The Town Pink!");
             SDL_Event event;
@@ -26,7 +29,7 @@ int main(int argc, char** argv)
             //rotate = glm::mat4();
             quad->setTransform(translate * rotate);
             renderer.addQuad(quad);
-            quad = new Quad(100, 100, 10);
+            quad = new Quad("test.png", 10);
             quad->setTransform(translate * rotate);
             renderer.addQuad(quad);//*/
             bool quit = false;

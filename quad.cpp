@@ -1,4 +1,5 @@
 #include <iostream>
+#include <SDL_image.h>
 #include "quad.h"
 
 float Quad::vertices[] = {
@@ -28,6 +29,32 @@ Quad::Quad(int width, int height, int z)
 
 Quad::Quad(const std::string& pngFilename, int z)
 {
+    _handle = 0;
+    _z = z;
+
+    SDL_PixelFormat targetFormat;
+    std::memset(&targetFormat, 0, sizeof(targetFormat));
+    targetFormat.format = SDL_PIXELFORMAT_RGBA8888;
+    targetFormat.BitsPerPixel = 32;
+    targetFormat.BytesPerPixel = 4;
+    targetFormat.Rmask = 255;
+    targetFormat.Gmask = 255 << 8;
+    targetFormat.Bmask = 255 << 16;
+    targetFormat.Amask = 255 << 24;
+    SDL_Surface* originalSurface = IMG_Load(pngFilename.c_str());
+    SDL_Surface* convertedSurface = SDL_ConvertSurface(originalSurface, &targetFormat, 0);
+    SDL_FreeSurface(originalSurface);
+
+    std::cout << pngFilename << " " << convertedSurface << std::endl;
+    std::cout << convertedSurface->w << ", " << convertedSurface->h << std::endl;
+    std::cout << (int)convertedSurface->format->BitsPerPixel << std::endl;
+    std::cout << (int)convertedSurface->format->BytesPerPixel << std::endl;
+    std::cout << convertedSurface->format->Rmask << std::endl;
+    std::cout << convertedSurface->format->Gmask << std::endl;
+    std::cout << convertedSurface->format->Bmask << std::endl;
+    std::cout << convertedSurface->format->Amask << std::endl;
+    // TODO: handle ownership
+    setTexture(convertedSurface->w, convertedSurface->h, (uint8_t*) convertedSurface->pixels);
 }
 
 Quad::~Quad()
