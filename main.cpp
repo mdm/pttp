@@ -20,16 +20,17 @@ int main(int argc, char** argv)
         {
             Window window("Paint The Town Pink!");
             SDL_Event event;
-            Renderer renderer;
+            ResourceManager resourceManager;
+            Renderer renderer(resourceManager);
 
             // test scene
-            Quad* quad = new Quad(200, 200, 8);
+            Quad* quad = new Quad(200, 200, 8, resourceManager.makeCheckerboardTexture(200, 200, 10));
             glm::mat4 translate = glm::translate(glm::vec3(100.0f, 100.0f, 0.0f));
             glm::mat4 rotate = glm::rotate(3.1415926f / 4, glm::vec3(0.0f, 0.0f, 1.0f));
             //rotate = glm::mat4();
             quad->setTransform(translate * rotate);
             renderer.addQuad(quad);
-            quad = new Quad("test.png", 10);
+            quad = new Quad(150, 150, 10, resourceManager.loadTextureFromPNG("corner.png"));
             quad->setTransform(translate * rotate);
             renderer.addQuad(quad);//*/
             bool quit = false;

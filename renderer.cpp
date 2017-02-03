@@ -23,8 +23,10 @@ const char* Renderer::fragmentShaderSource =
 "    color = texture(tex, texCoord);\n"
 "}\n";
 
-Renderer::Renderer()
+Renderer::Renderer(ResourceManager& resourceManager) : _resourceManager(resourceManager)
 {
+    _resourceManager = resourceManager;
+
     _framesRendered = 0;
 
     glewExperimental = GL_TRUE;
@@ -98,14 +100,19 @@ Renderer::~Renderer()
 void Renderer::addQuad(Quad* quad)
 {
     // set up texture
-    GLuint texture;
-    glGenTextures(1, &texture);
-    
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, quad->getWidth(), quad->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, quad->getTexture());
-    
-    quad->setHandle(texture);
+    uint32_t handle = quad->getTexture();
+
+    if(_textures.find(handle) == _textures.end())
+    {
+        GLuint texture;
+        glGenTextures(1, &texture);
+        
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _resourceManager.getTextureWidth(handle), _resourceManager.getTextureHeight(handle), 0, GL_RGBA, GL_UNSIGNED_BYTE, _resourceManager.getTextureData(handle));
+        
+        _textures[handle] = texture;
+    }
     _quads.push_back(quad);
 }
 
@@ -121,7 +128,7 @@ void Renderer::renderFrame()
 
     for(auto quad : _quads)
     {
-        glBindTexture(GL_TEXTURE_2D, quad->getHandle());
+        glBindTexture(GL_TEXTURE_2D, _textures.at(quad->getTexture()));
 
         // set up matrix uniforms
         GLint modelViewLoc = glGetUniformLocation(_shaderProgram, "modelView");

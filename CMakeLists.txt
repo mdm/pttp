@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(pttp)
-add_executable(${PROJECT_NAME} main.cpp window.cpp renderer.cpp quad.cpp level.cpp)
+add_executable(${PROJECT_NAME} main.cpp window.cpp resource_manager.cpp renderer.cpp quad.cpp level.cpp)
 
 include(FindPkgConfig)
 
