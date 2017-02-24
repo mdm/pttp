@@ -9,10 +9,30 @@ ResourceManager::ResourceManager() : _nextFreeHandle(1)
 
 ResourceManager::~ResourceManager()
 {
-    for(auto texture : _textureData)
+    for(auto texture : _textures)
     {
         delete texture.second;
     }
+
+    for(auto quad : _quads)
+    {
+        delete quad.second;
+    }
+}
+
+ResourceManager::ResourceType ResourceManager::getResourceType(uint32_t handle)
+{
+    if(_textures.find(handle) != _textures.end())
+    {
+        return ResourceType::texture;
+    }
+
+    if(_quads.find(handle) != _quads.end())
+    {
+        return ResourceType::quad;
+    }
+
+    return ResourceType::unknown;
 }
 
 uint32_t ResourceManager::loadTextureFromPNG(const std::string& filename)
@@ -36,12 +56,10 @@ uint32_t ResourceManager::loadTextureFromPNG(const std::string& filename)
     int size = convertedSurface->w * convertedSurface->h * 4;
     uint8_t* texture = new uint8_t[size];
     std::memcpy(texture, convertedSurface->pixels, size);
-
-    _textureData[handle] = texture;
-    _textureWidths[handle] = convertedSurface->w;
-    _textureHeights[handle] = convertedSurface->h;
     SDL_FreeSurface(convertedSurface);
 
+    std::string hash = "checkerboard: "; // TODO: add parameters to hash
+    _textures[handle] = new Texture(convertedSurface->w, convertedSurface->h, texture, hash);
     return handle;
 }
 
@@ -74,25 +92,26 @@ uint32_t ResourceManager::makeCheckerboardTexture(int width, int height, int ste
         }
     }
 
-    _textureData[handle] = texture;
-    _textureWidths[handle] = width;
-    _textureHeights[handle] = height;
-
+    std::string hash = "checkerboard: "; // TODO: add parameters to hash
+    _textures[handle] = new Texture(width, height, texture, hash);
     return handle;
 }
 
-uint8_t* ResourceManager::getTextureData(uint32_t handle)
+Texture* ResourceManager::getTexture(uint32_t handle)
 {
-    return _textureData.at(handle);
+    return _textures.at(handle);
 }
 
-int ResourceManager::getTextureWidth(uint32_t handle)
+uint32_t ResourceManager::makeQuad(int width, int height, int z, uint32_t texture)
 {
-    return _textureWidths.at(handle);
+    uint32_t handle = _nextFreeHandle++;
+    
+    _quads[handle] = new Quad(width, height, z, texture);
+    return handle;
 }
 
-int ResourceManager::getTextureHeight(uint32_t handle)
+Quad* ResourceManager::getQuad(uint32_t handle)
 {
-    return _textureHeights.at(handle);
+    return _quads.at(handle);
 }
 

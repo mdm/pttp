@@ -25,8 +25,6 @@ const char* Renderer::fragmentShaderSource =
 
 Renderer::Renderer(ResourceManager& resourceManager) : _resourceManager(resourceManager)
 {
-    _resourceManager = resourceManager;
-
     _framesRendered = 0;
 
     glewExperimental = GL_TRUE;
@@ -91,29 +89,25 @@ Renderer::Renderer(ResourceManager& resourceManager) : _resourceManager(resource
 
 Renderer::~Renderer()
 {
-    for(auto quad : _quads)
-    {
-        delete quad;
-    }
 }
 
-void Renderer::addQuad(Quad* quad)
+void Renderer::addQuad(uint32_t quadHandle)
 {
     // set up texture
-    uint32_t handle = quad->getTexture();
+    uint32_t textureHandle = _resourceManager.getQuad(quadHandle)->getTextureHandle();
 
-    if(_textures.find(handle) == _textures.end())
+    if(_textures.find(textureHandle) == _textures.end())
     {
         GLuint texture;
         glGenTextures(1, &texture);
         
         glBindTexture(GL_TEXTURE_2D, texture);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _resourceManager.getTextureWidth(handle), _resourceManager.getTextureHeight(handle), 0, GL_RGBA, GL_UNSIGNED_BYTE, _resourceManager.getTextureData(handle));
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _resourceManager.getTexture(textureHandle)->getWidth(), _resourceManager.getTexture(textureHandle)->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, _resourceManager.getTexture(textureHandle)->getData());
         
-        _textures[handle] = texture;
+        _textures[textureHandle] = texture;
     }
-    _quads.push_back(quad);
+    _quads.push_back(quadHandle);
 }
 
 void Renderer::renderFrame()
@@ -126,9 +120,10 @@ void Renderer::renderFrame()
     glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for(auto quad : _quads)
+    for(auto handle : _quads)
     {
-        glBindTexture(GL_TEXTURE_2D, _textures.at(quad->getTexture()));
+        Quad* quad = _resourceManager.getQuad(handle);
+        glBindTexture(GL_TEXTURE_2D, _textures.at(quad->getTextureHandle()));
 
         // set up matrix uniforms
         GLint modelViewLoc = glGetUniformLocation(_shaderProgram, "modelView");
@@ -140,7 +135,8 @@ void Renderer::renderFrame()
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // TODO: delete buffers ???
-    }//*/
+    }
+    _quads.clear();
 
     ++_framesRendered;
     clock_t elapsedTime = clock() - _startTime;

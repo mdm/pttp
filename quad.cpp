@@ -60,12 +60,12 @@ void Quad::setZ(int z)
     _z = z;
 }
 
-uint32_t Quad::getTexture()
+uint32_t Quad::getTextureHandle()
 {
     return _texture;
 }
 
-void Quad::setTexture(uint32_t texture)
+void Quad::setTextureHandle(uint32_t texture)
 {
     _texture = texture;
 }

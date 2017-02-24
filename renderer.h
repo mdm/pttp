@@ -13,7 +13,7 @@ public:
     Renderer(ResourceManager& resourceManager);
     ~Renderer();
 
-    void addQuad(Quad* quad);
+    void addQuad(uint32_t quad);
     void renderFrame();
 
 private:
@@ -22,7 +22,7 @@ private:
     static const char* fragmentShaderSource; 
 
     GLuint _shaderProgram;
-    std::vector<Quad*> _quads;
+    std::vector<uint32_t> _quads;
     std::map<uint32_t, GLuint> _textures;
 
     clock_t _startTime;

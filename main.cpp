@@ -24,15 +24,14 @@ int main(int argc, char** argv)
             Renderer renderer(resourceManager);
 
             // test scene
-            Quad* quad = new Quad(200, 200, 8, resourceManager.makeCheckerboardTexture(200, 200, 10));
+            uint32_t checkerboard = resourceManager.makeQuad(200, 200, 8, resourceManager.makeCheckerboardTexture(200, 200, 10));
             glm::mat4 translate = glm::translate(glm::vec3(100.0f, 100.0f, 0.0f));
             glm::mat4 rotate = glm::rotate(3.1415926f / 4, glm::vec3(0.0f, 0.0f, 1.0f));
-            //rotate = glm::mat4();
-            quad->setTransform(translate * rotate);
-            renderer.addQuad(quad);
-            quad = new Quad(150, 150, 10, resourceManager.loadTextureFromPNG("corner.png"));
-            quad->setTransform(translate * rotate);
-            renderer.addQuad(quad);//*/
+            resourceManager.getQuad(checkerboard)->setTransform(translate * rotate);
+
+            uint32_t image = resourceManager.makeQuad(150, 150, 10, resourceManager.loadTextureFromPNG("test.png"));
+            resourceManager.getQuad(image)->setTransform(translate * rotate);
+
             bool quit = false;
             float angleRadians = 3.1415926f / 4;
 
@@ -60,11 +59,13 @@ int main(int argc, char** argv)
                         angleRadians = 0.0f;
                     }
                     rotate = glm::rotate(angleRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-                    quad->setTransform(translate * rotate);
+                    resourceManager.getQuad(image)->setTransform(translate * rotate);
 
                     lag -= 16;
                 }
 
+                renderer.addQuad(checkerboard);
+                renderer.addQuad(image);
                 renderer.renderFrame();
                 window.Swap();
             }

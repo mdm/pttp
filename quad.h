@@ -17,8 +17,8 @@ public:
     void setHeight(int height);
     int getZ();
     void setZ(int z);
-    uint32_t getTexture();
-    void setTexture(uint32_t handle);
+    uint32_t getTextureHandle();
+    void setTextureHandle(uint32_t handle);
     glm::mat4 getTransform();
     void setTransform(const glm::mat4& transform);
 
