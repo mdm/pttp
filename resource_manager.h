@@ -17,6 +17,8 @@ public:
 
     uint32_t loadTextureFromPNG(const std::string& filename);
     uint32_t makeCheckerboardTexture(int width, int height, int steps);
+    uint32_t makeRectangleTexture(int width, int height, uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
+    uint32_t makeEllipseTexture(int width, int height, uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
     Texture* getTexture(uint32_t handle);
 
     uint32_t makeQuad(int width, int height, int z, uint32_t texture);

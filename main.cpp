@@ -32,6 +32,9 @@ int main(int argc, char** argv)
             uint32_t image = resourceManager.makeQuad(150, 150, 10, resourceManager.loadTextureFromPNG("test.png"));
             resourceManager.getQuad(image)->setTransform(translate * rotate);
 
+            uint32_t ellipse = resourceManager.makeQuad(200, 100, 20, resourceManager.makeEllipseTexture(200, 100, 0, 255, 0, 255));
+            resourceManager.getQuad(ellipse)->setTransform(glm::translate(glm::vec3(300.0f, 300.0f, 0.0f)));
+
             bool quit = false;
             float angleRadians = 3.1415926f / 4;
 
@@ -66,6 +69,7 @@ int main(int argc, char** argv)
 
                 renderer.addQuad(checkerboard);
                 renderer.addQuad(image);
+                renderer.addQuad(ellipse);
                 renderer.renderFrame();
                 window.Swap();
             }

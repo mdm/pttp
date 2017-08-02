@@ -1,0 +1,11 @@
+1) init all agents in same square
+2) select point with maximum overlap
+3) select agent closest to that point
+4) sample along a circle with radius = agent radius
+5) for each sample calculate overlap with polygon and keep samples above threshold (or top 3?)
+6) for each sample calculate overlap with other agents keep minimum
+7) move agent in that direction
+8) perturb agent
+
+
+

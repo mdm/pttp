@@ -97,6 +97,68 @@ uint32_t ResourceManager::makeCheckerboardTexture(int width, int height, int ste
     return handle;
 }
 
+uint32_t ResourceManager::makeRectangleTexture(int width, int height, uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+{
+    // TODO: allow custom colors
+    uint32_t handle = _nextFreeHandle++;
+
+    uint8_t* texture = new uint8_t[width * height * 4];
+
+    int i = 0;
+    for(int y = 0; y < height; ++y)
+    {
+        for(int x = 0; x < width; ++x)
+        {
+            texture[i++] = red;
+            texture[i++] = green;
+            texture[i++] = blue;
+            texture[i++] = alpha;
+        }
+    }
+
+    std::string hash = "rectangle: "; // TODO: add parameters to hash
+    _textures[handle] = new Texture(width, height, texture, hash);
+    return handle;
+}
+
+uint32_t ResourceManager::makeEllipseTexture(int width, int height, uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+{
+    // TODO: allow custom colors
+    uint32_t handle = _nextFreeHandle++;
+
+    uint8_t* texture = new uint8_t[width * height * 4];
+
+    int i = 0;
+    for(int y = 0; y < height; ++y)
+    {
+        for(int x = 0; x < width; ++x)
+        {
+            int radiusX = width / 2;
+            int radiusY = height / 2;
+            int relativeX = x - radiusX;
+            int relativeY = y - radiusY;
+            if((1.0 * relativeX * relativeX) / (radiusX * radiusX) + (1.0 * relativeY * relativeY) / (radiusY * radiusY) < 1)
+            {
+                texture[i++] = red;
+                texture[i++] = green;
+                texture[i++] = blue;
+                texture[i++] = alpha;
+            }
+            else
+            {
+                texture[i++] = 0;
+                texture[i++] = 0;
+                texture[i++] = 0;
+                texture[i++] = 0;
+            }
+        }
+    }
+
+    std::string hash = "ellipse: "; // TODO: add parameters to hash
+    _textures[handle] = new Texture(width, height, texture, hash);
+    return handle;
+}
+
 Texture* ResourceManager::getTexture(uint32_t handle)
 {
     return _textures.at(handle);
