@@ -70,6 +70,11 @@ int main(int argc, char** argv)
                 renderer.addQuad(checkerboard);
                 renderer.addQuad(image);
                 renderer.addQuad(ellipse);
+
+                for(auto quad : level.getQuads(resourceManager)) {
+                    renderer.addQuad(quad);
+                }
+
                 renderer.renderFrame();
                 window.Swap();
             }

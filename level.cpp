@@ -3,8 +3,21 @@
 
 #include "level.h"
 
+//Level::Level(ResourceManager& resourceManager, const std::string& filename) : _resourceManager(resourceManager)
 Level::Level(const std::string& filename)
 {
+    for(int i = 0; i < 4; i++) {
+        _textures[i] = 0;
+    }
+
+    for(int y = 0; y < 31; ++y)
+    {
+        for(int x = 0; x < 28; ++x)
+        {
+            _quads[x][y] = 0;
+        }
+    }
+
     load(filename);
 }
 
@@ -66,4 +79,39 @@ void Level::load(const std::string& filename)
         }
         ++y;
     }
+}
+
+std::vector<uint32_t> Level::getQuads(ResourceManager& resourceManager) {
+    const int tileSize = 10;
+
+    if(_textures[0] == 0) {
+        _textures[0] = resourceManager.makeRectangleTexture(tileSize, tileSize, 0, 0, 255, 255);
+    }
+    if(_textures[1] == 0) {
+        _textures[1] = resourceManager.makeRectangleTexture(tileSize, tileSize, 0, 0, 0, 255);
+    }
+    if(_textures[2] == 0) {
+        _textures[2] = resourceManager.makeEllipseTexture(tileSize, tileSize, 255, 255, 255, 255);
+    }
+    if(_textures[3] == 0) {
+        _textures[3] = resourceManager.makeEllipseTexture(tileSize, tileSize, 255, 0, 0, 255);
+    }
+
+    std::vector<uint32_t> quads;
+
+    for(int y = 0; y < 31; ++y)
+    {
+        for(int x = 0; x < 28; ++x)
+        {
+            if(_quads[x][y] == 0) {
+                _quads[x][y] = resourceManager.makeQuad(tileSize, tileSize, 20, _textures[_grid[x][y]]);
+                resourceManager.getQuad(_quads[x][y])->setTransform(glm::translate(glm::vec3(x * tileSize, y * tileSize, 0.0f)));
+            } else {
+                resourceManager.getQuad(_quads[x][y])->setTextureHandle(_textures[_grid[x][y]]);
+            }
+            quads.push_back(_quads[x][y]);
+        }
+    }
+
+    return quads;
 }
