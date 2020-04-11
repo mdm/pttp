@@ -72,8 +72,8 @@ void Quad::setTextureHandle(uint32_t texture)
 
 glm::mat4 Quad::getTransform()
 {
-    glm::mat4 translate = glm::translate(glm::vec3(_width / 2.0f, _height / 2.0f, (float) -_z));
-    glm::mat4 scale = glm::scale(glm::vec3(_width / 2.0f, _height / 2.0f, 1.0f));
+    glm::mat4 translate = glm::translate(glm::mat4(1.0f) ,glm::vec3(_width / 2.0f, _height / 2.0f, (float) -_z));
+    glm::mat4 scale = glm::scale(glm::mat4(1.0f) ,glm::vec3(_width / 2.0f, _height / 2.0f, 1.0f));
     return translate * _transform * scale;
 }
 

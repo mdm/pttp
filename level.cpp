@@ -105,7 +105,7 @@ std::vector<uint32_t> Level::getQuads(ResourceManager& resourceManager) {
         {
             if(_quads[x][y] == 0) {
                 _quads[x][y] = resourceManager.makeQuad(tileSize, tileSize, 20, _textures[_grid[x][y]]);
-                resourceManager.getQuad(_quads[x][y])->setTransform(glm::translate(glm::vec3(x * tileSize, y * tileSize, 0.0f)));
+                resourceManager.getQuad(_quads[x][y])->setTransform(glm::translate(glm::mat4(1.0f) ,glm::vec3(x * tileSize, y * tileSize, 0.0f)));
             } else {
                 resourceManager.getQuad(_quads[x][y])->setTextureHandle(_textures[_grid[x][y]]);
             }

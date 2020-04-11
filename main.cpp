@@ -1,6 +1,8 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 #include "window.h"
 #include "renderer.h"
@@ -25,15 +27,15 @@ int main(int argc, char** argv)
 
             // test scene
             uint32_t checkerboard = resourceManager.makeQuad(200, 200, 8, resourceManager.makeCheckerboardTexture(200, 200, 10));
-            glm::mat4 translate = glm::translate(glm::vec3(100.0f, 100.0f, 0.0f));
-            glm::mat4 rotate = glm::rotate(3.1415926f / 4, glm::vec3(0.0f, 0.0f, 1.0f));
+            glm::mat4 translate = glm::translate(glm::mat4(1.0f) ,glm::vec3(100.0f, 100.0f, 0.0f));
+            glm::mat4 rotate = glm::rotate(glm::mat4(1.0f) ,3.1415926f / 4, glm::vec3(0.0f, 0.0f, 1.0f));
             resourceManager.getQuad(checkerboard)->setTransform(translate * rotate);
 
             uint32_t image = resourceManager.makeQuad(150, 150, 10, resourceManager.loadTextureFromPNG("test.png"));
             resourceManager.getQuad(image)->setTransform(translate * rotate);
 
             uint32_t ellipse = resourceManager.makeQuad(200, 100, 20, resourceManager.makeEllipseTexture(200, 100, 0, 255, 0, 255));
-            resourceManager.getQuad(ellipse)->setTransform(glm::translate(glm::vec3(300.0f, 300.0f, 0.0f)));
+            resourceManager.getQuad(ellipse)->setTransform(glm::translate(glm::mat4(1.0f) ,glm::vec3(300.0f, 300.0f, 0.0f)));
 
             bool quit = false;
             float angleRadians = 3.1415926f / 4;
@@ -61,7 +63,7 @@ int main(int argc, char** argv)
                     {
                         angleRadians = 0.0f;
                     }
-                    rotate = glm::rotate(angleRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+                    rotate = glm::rotate(glm::mat4(1.0f) ,angleRadians, glm::vec3(0.0f, 0.0f, 1.0f));
                     resourceManager.getQuad(image)->setTransform(translate * rotate);
 
                     lag -= 16;
@@ -71,9 +73,9 @@ int main(int argc, char** argv)
                 renderer.addQuad(image);
                 renderer.addQuad(ellipse);
 
-                for(auto quad : level.getQuads(resourceManager)) {
-                    renderer.addQuad(quad);
-                }
+                // for(auto quad : level.getQuads(resourceManager)) {
+                //     renderer.addQuad(quad);
+                // }
 
                 renderer.renderFrame();
                 window.Swap();
